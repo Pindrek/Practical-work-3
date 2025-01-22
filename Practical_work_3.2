@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <math.h>
+#include <float.h>
+
+#define M_E 2.718281828459045
+
+#define PUT_DELIM1(y, h1, d) (((y) + (h1)) > (d) ? '\n' : '\t')
+#define FUNC(x, y) ((x != y) ? pow(M_E, sqrt((x) - (y)) * ((x) + (y))) : NAN)
+#define PUT_DELIM(x, h, b) (((x) + (h)) > (b) ? '\n' : '\t')
+#define TABULATE(msg, a, b, h, a1, d, h1)                   \
+    printf("%s\n", msg);                                    \
+    for (x = (a); x <= (b); x += (h)) {                     \
+        for (y = (a1); y <= (d); y += (h1)) {               \
+            printf("x = %.2f, y = %.2f, FUNC = %.2f%c",     \
+                   x, y, FUNC(x, y), PUT_DELIM1(y, h1, d)); \
+        }                                                   \
+    }
+
+int main() {
+    double a = 1, b = 3, h = 0.1;
+    double c = -4, d = 4, h1 = 0.2;
+    double x, y;
+    double min = INFINITY, max = -INFINITY, value;
+    TABULATE("x, y:", a, b, h, c, d, h1);
+    for (x = a; x <= b; x += h) 
+    {
+        for (y = c; y <= d; y += h1) {
+            if (x != y) 
+            {
+                value = FUNC(x, y);
+                if (value < min) min = value;
+                if (value > max) max = value;
+            }
+        }
+    }
+    if (min == INFINITY || max == -INFINITY) {
+        printf("\nThere are no valid values of the function in the given domain.\n");
+    }
+    else {
+        printf("\nmin: %.5f\n", min);
+        printf("max: %.5f\n", max);
+    }
+    return 0;
+}
